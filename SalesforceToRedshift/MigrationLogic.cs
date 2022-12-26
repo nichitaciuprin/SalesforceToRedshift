@@ -6,7 +6,7 @@ public static class MigrationLogic
         var allLines = GetTableInfo(tableName,csvFile,sfdxClient);
 
         var max = allLines.Select(x => x.Item3).Max();
-        if (max > RedshiftClient.VarcharMaxBytesCount)
+        if (max > RedshiftClient.VarcharMaxSizeInBytes)
             throw new Exception($"{max} > RedshiftHelper.VarcharMaxBytesCount");
 
         allLines = allLines
@@ -55,7 +55,7 @@ public static class MigrationLogic
     private static (string,string,int)[]? GetTableInfo1(string filePath_csvFile)
     {
         var result = CsvHelper2.GetTableInfo(filePath_csvFile);
-        result = CsvHelper2.SplitColumnInfos(result,RedshiftClient.VarcharMaxBytesCount);
+        result = CsvHelper2.SplitColumnInfos(result,RedshiftClient.VarcharMaxSizeInBytes);
         return result
             .Select(x =>
             {

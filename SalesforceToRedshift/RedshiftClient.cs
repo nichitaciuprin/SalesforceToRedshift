@@ -3,7 +3,7 @@ using System.Data.Odbc;
 
 public class RedshiftClient : IDisposable
 {
-    public const int VarcharMaxBytesCount = 65_535;
+    public const int VarcharMaxSizeInBytes = 65_535;
     public OdbcConnection connection;
     private bool disposed;
 

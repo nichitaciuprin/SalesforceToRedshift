@@ -57,7 +57,7 @@ public static class Program
         var sfdxClient = new SfdxClient(config.SalesforceUserName);
         CsvHelper2.Validate(csvFile);
         var oldCsvFile = csvFile;
-        var newCsvFile = CsvHelper2.SplitByColumnSizeIfLargeValueExists(csvFile,RedshiftClient.VarcharMaxBytesCount);
+        var newCsvFile = CsvHelper2.SplitByColumnSizeIfLargeValueExists(csvFile,RedshiftClient.VarcharMaxSizeInBytes);
         csvFile = newCsvFile == null ? oldCsvFile : newCsvFile;
         redshiftClient.CreateSchemaIfNotExists(config.RedsfhitTargetSchemaName);
         var lines = MigrationLogic.ColumnLines(tableName, csvFile, sfdxClient);
