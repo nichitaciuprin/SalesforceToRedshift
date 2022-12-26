@@ -51,13 +51,6 @@ public static class Program
 
         Console.WriteLine("Starting migration task");
         var fileName = tableName+".csv";
-        var s3Client = new S3Client(config.S3Config);
-        if (s3Client.FileExists(fileName))
-        {
-            ConsoleHelper.WriteLineWarning($"File {fileName} already exists in S3");
-            return;
-        }
-
         var csvFile = ExtractCsvFile(config.ZipFilesSearchPath,fileName,config.DirPath);
         FileHelper.PrintFileSize(csvFile);
         var redshiftClient = new RedshiftClient(config.RedshiftConfig);
@@ -69,6 +62,7 @@ public static class Program
         redshiftClient.CreateSchemaIfNotExists(config.RedsfhitTargetSchemaName);
         var lines = MigrationLogic.ColumnLines(config.RedsfhitTargetSchemaName, tableName, csvFile, redshiftClient, sfdxClient);
         redshiftClient.DropAndCreateTable(config.RedsfhitTargetSchemaName, tableName, lines);
+        var s3Client = new S3Client(config.S3Config);
         s3Client.UploadFile(fileName,csvFile);
         var s3filePath = $"{config.S3Config.BucketName}/{fileName}";
         redshiftClient.Copy(config.RedsfhitTargetSchemaName,tableName,s3filePath,config.S3Config);
