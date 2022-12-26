@@ -60,7 +60,7 @@ public static class Program
         var newCsvFile = CsvHelper2.SplitByColumnSizeIfLargeValueExists(csvFile,RedshiftClient.VarcharMaxBytesCount);
         csvFile = newCsvFile == null ? oldCsvFile : newCsvFile;
         redshiftClient.CreateSchemaIfNotExists(config.RedsfhitTargetSchemaName);
-        var lines = MigrationLogic.ColumnLines(config.RedsfhitTargetSchemaName, tableName, csvFile, redshiftClient, sfdxClient);
+        var lines = MigrationLogic.ColumnLines(tableName, csvFile, sfdxClient);
         redshiftClient.DropAndCreateTable(config.RedsfhitTargetSchemaName, tableName, lines);
         var s3Client = new S3Client(config.S3Config);
         s3Client.UploadFile(fileName,csvFile);
@@ -68,8 +68,7 @@ public static class Program
         redshiftClient.Copy(config.RedsfhitTargetSchemaName,tableName,s3filePath,config.S3Config);
         if (newCsvFile != null)
             File.Delete(newCsvFile);
-
-        File.Delete(csvFile);
+        File.Delete(oldCsvFile);
         FileHelper.SaveCreate(saveFilePath,tableName);
         Console.WriteLine($"DONE");
     }

@@ -1,9 +1,9 @@
 public static class MigrationLogic
 {
-    public static string[] ColumnLines(string schemaName, string tableName, string csvFile, RedshiftClient redshiftClient, SfdxClient sfdxClient)
+    public static string[] ColumnLines(string tableName, string csvFile, SfdxClient sfdxClient)
     {
         Console.WriteLine("Generating SQL. DropAndCreateTable");
-        var allLines = GetTableInfo(schemaName,tableName,csvFile,sfdxClient);
+        var allLines = GetTableInfo(tableName,csvFile,sfdxClient);
 
         var max = allLines.Select(x => x.Item3).Max();
         if (max > RedshiftClient.VarcharMaxBytesCount)
@@ -27,7 +27,7 @@ public static class MigrationLogic
 
         return duno;
     }
-    private static (string,string,int)[] GetTableInfo(string schemaName, string tableName, string csvFilePath, SfdxClient sfdxClient)
+    private static (string,string,int)[] GetTableInfo(string tableName, string csvFilePath, SfdxClient sfdxClient)
     {
         var lines1 = GetTableInfo1(csvFilePath);
         var lines2 = GetTableInfo2(tableName,sfdxClient);
