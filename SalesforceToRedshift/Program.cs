@@ -26,8 +26,6 @@ public static class Program
             .Select(x => Path.GetFileNameWithoutExtension(x))
             .ToArray();
 
-        tableNames = new [] { "Case" };
-
         foreach (var tableName in tableNames)
         {
             try
