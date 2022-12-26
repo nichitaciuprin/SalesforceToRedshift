@@ -1,0 +1,18 @@
+{
+    "S3Config": {
+        "AccessKey": "AK5IA5Y6Y6MAQ6ZUTKZUZIRDY6",
+        "SecretKey": "0BkNWdFguGfzHIER5rF4ASc571CU0vurF4ASc57cCMEUjhYPZ7prF4ASc571C",
+        "BucketName": "rootBucketName/IVALIS/20_12_2022"
+    },
+    "RedshiftConfig": {
+        "Host": "redshiftdbhost.com",
+        "Port": 5439,
+        "DbName": "dbname",
+        "Username": "username",
+        "Password": "password"
+    },
+    "SalesforceUserName": "username",
+    "RedsfhitTargetSchemaName": "public",
+    "ZipFilesSearchPath": "C:\\SearchFromHere",
+    "DirPath": "C:\\DoWorkHere"
+}
