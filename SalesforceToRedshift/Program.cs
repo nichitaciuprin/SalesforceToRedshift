@@ -53,7 +53,8 @@ public static class Program
         var fileName = tableName+".csv";
         var csvFile = ExtractCsvFile(config.ZipFilesSearchPath,fileName,config.DirPath);
         FileHelper.PrintFileSize(csvFile);
-        var redshiftClient = new RedshiftClient(config.RedshiftConfig);
+        using var redshiftClient = new RedshiftClient(config.RedshiftConfig);
+        using var s3Client = new S3Client(config.S3Config);
         var sfdxClient = new SfdxClient(config.SalesforceUserName);
         CsvHelper2.Validate(csvFile);
         var oldCsvFile = csvFile;
@@ -62,7 +63,6 @@ public static class Program
         redshiftClient.CreateSchemaIfNotExists(config.RedsfhitTargetSchemaName);
         var lines = MigrationLogic.ColumnLines(tableName, csvFile, sfdxClient);
         redshiftClient.DropAndCreateTable(config.RedsfhitTargetSchemaName, tableName, lines);
-        var s3Client = new S3Client(config.S3Config);
         s3Client.UploadFile(fileName,csvFile);
         var s3filePath = $"{config.S3Config.BucketName}/{fileName}";
         redshiftClient.Copy(config.RedsfhitTargetSchemaName,tableName,s3filePath,config.S3Config);
