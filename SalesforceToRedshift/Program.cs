@@ -4,7 +4,7 @@ public static class Program
 {
     private static void Main(string[] args)
     {
-        var config = GetConfig(args);
+        var config = GetConfig(args[0]);
 
         if (!Directory.Exists(config.DirPath))
             Directory.CreateDirectory(config.DirPath);
@@ -76,9 +76,8 @@ public static class Program
             .Select(x => Path.GetFileNameWithoutExtension(x))
             .ToArray();
     }
-    private static Config GetConfig(string[] args)
+    private static Config GetConfig(string filePath)
     {
-        var filePath = args[0];
         var reader = File.ReadAllText(filePath);
         var config = JsonSerializer.Deserialize<Config>(reader);
         if (config == null)
