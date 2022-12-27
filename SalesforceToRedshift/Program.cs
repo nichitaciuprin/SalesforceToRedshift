@@ -17,14 +17,7 @@ public static class Program
         if (!Directory.Exists(config.DirPath))
             Directory.CreateDirectory(config.DirPath);
 
-        var tableNames =
-            ZipHelper.GetFilesZip(config.ZipFilesSearchPath)
-            .Select(x => ZipHelper.GetFileNames(x))
-            .SelectMany(x => x)
-            .Distinct()
-            .Where(x => Path.GetExtension(x) == ".csv")
-            .Select(x => Path.GetFileNameWithoutExtension(x))
-            .ToArray();
+        var tableNames = FindTables(config.ZipFilesSearchPath);
 
         foreach (var tableName in tableNames)
         {
@@ -79,5 +72,16 @@ public static class Program
         var csvFile = Path.Combine(extractPath,fileName);
         CsvHelper2.Merge(fileParts,csvFile);
         return csvFile;
+    }
+    private static string[] FindTables(string searchPath)
+    {
+        return
+            ZipHelper.GetFilesZip(searchPath)
+            .Select(x => ZipHelper.GetFileNames(x))
+            .SelectMany(x => x)
+            .Distinct()
+            .Where(x => Path.GetExtension(x) == ".csv")
+            .Select(x => Path.GetFileNameWithoutExtension(x))
+            .ToArray();
     }
 }
