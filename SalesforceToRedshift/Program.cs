@@ -4,16 +4,8 @@ public static class Program
 {
     private static void Main(string[] args)
     {
-        var filePath = args[0];
-        var reader = File.ReadAllText(filePath);
-        var config = JsonSerializer.Deserialize<Config>(reader);
-        if (config == null)
-            throw new Exception("Could not read config file");
-        Helper.PrintProperties(config);
-        Migrate(config);
-    }
-    private static void Migrate(Config config)
-    {
+        var config = GetConfig(args);
+
         if (!Directory.Exists(config.DirPath))
             Directory.CreateDirectory(config.DirPath);
 
@@ -83,5 +75,14 @@ public static class Program
             .Where(x => Path.GetExtension(x) == ".csv")
             .Select(x => Path.GetFileNameWithoutExtension(x))
             .ToArray();
+    }
+    private static Config GetConfig(string[] args)
+    {
+        var filePath = args[0];
+        var reader = File.ReadAllText(filePath);
+        var config = JsonSerializer.Deserialize<Config>(reader);
+        if (config == null)
+            throw new Exception("Could not read config file");
+        return config;
     }
 }
