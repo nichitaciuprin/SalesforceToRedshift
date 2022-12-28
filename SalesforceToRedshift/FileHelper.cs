@@ -19,19 +19,6 @@ public static class FileHelper
         var lines = File.ReadAllLines(saveFilePath);
         return lines.Contains(saveName);
     }
-    public static void SimpleFilePrint(string filePath)
-    {
-        using var streamReader = new StreamReader(@"C:\Users\Nikita\Desktop\IVALIS\05_12_2022\Merge\Blue_sheet__c.csv.new");
-        Console.WriteLine("!");
-        while (true)
-        {
-            Console.ReadKey();
-            var line = streamReader.ReadLine();
-            if (line == null) return;
-            Console.WriteLine(line);
-            Console.WriteLine("-----------");
-        }
-    }
     public static int CountLines(string filePath)
     {
         var lineCount = 0;
