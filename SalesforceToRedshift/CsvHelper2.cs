@@ -9,18 +9,15 @@ public static class CsvHelper2
 
         if (filePaths.Length == 1)
         {
-            File.Move(filePaths[0],targetFilePath);
+            File.Move(filePaths[0],targetFilePath,true);
             return;
         }
 
         var destFile = FileHelper.GetLargestFile(filePaths);
         var sourceFiles = filePaths.Where(x => x != destFile).ToArray();
 
-        if (File.Exists(targetFilePath))
-            File.Delete(targetFilePath);
-
         Console.WriteLine($"Moving file. {destFile} -> {targetFilePath}");
-        File.Move(destFile,targetFilePath);
+        File.Move(destFile,targetFilePath,true);
         destFile = targetFilePath;
 
         foreach (var sourceFile in sourceFiles)
