@@ -1,0 +1,20 @@
+is_global = true
+
+dotnet_diagnostic.IDE0001.severity = error # name can be simplified
+dotnet_diagnostic.IDE0002.severity = error
+dotnet_diagnostic.IDE0003.severity = error # name can be simplified
+dotnet_diagnostic.IDE0049.severity = error # name can be simplified
+dotnet_diagnostic.IDE0051.severity = error # unused methods
+dotnet_diagnostic.IDE0005.severity = error # unused namespaces
+dotnet_diagnostic.IDE0047.severity = error # parenteses can be removed
+dotnet_diagnostic.CA1050.severity = none
+dotnet_diagnostic.CA1816.severity = none # IDisposable
+dotnet_diagnostic.CA1801.severity = error
+dotnet_diagnostic.CA1804.severity = error
+dotnet_diagnostic.CA1823.severity = error
+dotnet_diagnostic.CA1812.severity = error
+dotnet_diagnostic.CA1811.severity = error
+dotnet_diagnostic.CS8020.severity = error
+dotnet_diagnostic.CA1000.severity = warning # Do not declare static members on generic types
+
+
