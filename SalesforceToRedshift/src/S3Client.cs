@@ -22,14 +22,6 @@ public class S3Client : IDisposable
         client = new AmazonS3Client(creds,Amazon.RegionEndpoint.USEast1);
         transferUtility = new TransferUtility(client);
     }
-    // public async Task<string[]> ListFiles(string s3DirectoryPath)
-    // {
-    //     var listObjectRequest = new ListObjectsV2Request();
-    //     listObjectRequest.BucketName = bucketName;
-    //     listObjectRequest.Prefix = key;
-    //     var response = await client.ListObjectsV2Async(listObjectRequest);
-    //     return response.S3Objects.Select(x => x.Key).ToArray();
-    // }
     public async Task<string> GetContentType(string s3FilePath)
     {
         var bucketNameAndKey = BucketNameAndKey(s3FilePath);
