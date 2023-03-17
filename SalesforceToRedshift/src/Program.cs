@@ -7,7 +7,8 @@ public static class Program
 
         using var redshiftClient = new RedshiftClient(config.ConfigRedshift);
         using var s3Client = new S3Client(config.ConfigS3);
-        var sfdxClient = SalesForceClient.CreateFromSFDX(config.SalesforceUserName);
+        var salesForceClient = SalesForceClient.CreateFromSFDX(config.SalesforceUserName);
+
         var fileNamesDone = File.ReadAllLines(config.FileNamesDoneFile);
         var fileNamesTodo = CsvFilesExtracter.GetFileNames(config.LocalZipFilesSearchPath).Except(fileNamesDone);
 
@@ -27,13 +28,13 @@ public static class Program
 
                 var fileName = Path.GetFileName(csvFile);
                 var tableName = Path.GetFileNameWithoutExtension(csvFile);
-                var lines = MigrationLogic.CreateSqlCreateLines(tableName, sfdxClient);
+                var lines = MigrationLogic.CreateSqlCreateLines(tableName, salesForceClient);
                 redshiftClient.CreateSchemaIfNotExists(config.ConfigRedshift.SchemaName);
                 redshiftClient.DropAndCreateTable(config.ConfigRedshift.SchemaName, tableName, lines);
 
-                var s3file = $"{config.S3WorkingDirectory}/{fileName}";
-                s3Client.UploadFile(csvFile,s3file);
-                redshiftClient.Copy(config.ConfigRedshift.SchemaName,tableName,s3file,config.ConfigS3);
+                var s3CsvFile = $"{config.S3WorkingDirectory}/{fileName}";
+                s3Client.UploadFile(csvFile,s3CsvFile);
+                redshiftClient.Copy(config.ConfigRedshift.SchemaName,tableName,s3CsvFile,config.ConfigS3);
 
                 File.AppendAllLines(config.FileNamesDoneFile, new [] { fileNameTodo } );
             }
