@@ -5,7 +5,6 @@ public static class Program
     {
         var config = Config.Get(args);
 
-        Directory.CreateDirectory(config.LocalWorkingDirectory);
         using var redshiftClient = new RedshiftClient(config.ConfigRedshift);
         using var s3Client = new S3Client(config.ConfigS3);
         var sfdxClient = SalesForceClient.CreateFromSFDX(config.SalesforceUserName);

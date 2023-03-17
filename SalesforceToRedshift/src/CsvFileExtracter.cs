@@ -15,6 +15,7 @@ public static class CsvFilesExtracter
     // }
     public static string Extract(string searchPath, string extractDirectory, string fileName)
     {
+        Directory.CreateDirectory(extractDirectory);
         var filesWithSameName = ExtractFilesWithSameName(searchPath,fileName,extractDirectory);
         var csvFile = Path.Combine(extractDirectory,fileName);
         CsvHelper2.Merge(filesWithSameName,csvFile);
