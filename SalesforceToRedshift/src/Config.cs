@@ -1,4 +1,6 @@
 #nullable disable warnings
+using System.Text.Json;
+
 public class Config
 {
     public readonly ConfigS3 ConfigS3;
@@ -7,6 +9,14 @@ public class Config
     public readonly string LocalZipFilesSearchPath;
     public readonly string LocalWorkingDirectory;
     public readonly string S3WorkingDirectory;
+    public static Config Get(string[] args)
+    {
+        var filePath = args[0];
+        var reader = File.ReadAllText(filePath);
+        var config = JsonSerializer.Deserialize<Config>(reader);
+        return config!;
+    }
+    public string FileNamesDoneFile => Path.Combine(LocalWorkingDirectory,"FileNamesDone.txt");
 }
 public class ConfigS3
 {
