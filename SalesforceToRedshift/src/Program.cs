@@ -26,12 +26,12 @@ public static class Program
                     continue;
                 }
 
-                var fileName = Path.GetFileName(csvFile);
                 var tableName = Path.GetFileNameWithoutExtension(csvFile);
                 var lines = MigrationLogic.CreateSqlCreateLines(tableName, salesForceClient);
                 redshiftClient.CreateSchemaIfNotExists(config.ConfigRedshift.SchemaName);
                 redshiftClient.DropAndCreateTable(config.ConfigRedshift.SchemaName, tableName, lines);
 
+                var fileName = Path.GetFileName(csvFile);
                 var s3CsvFile = $"{config.S3WorkingDirectory}/{fileName}";
                 s3Client.UploadFile(csvFile,s3CsvFile);
                 redshiftClient.Copy(config.ConfigRedshift.SchemaName,tableName,s3CsvFile,config.ConfigS3);
