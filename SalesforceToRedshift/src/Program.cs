@@ -15,22 +15,27 @@ public static class Program
         foreach (var fileNameTodo in fileNamesTodo)
         {
             Console.WriteLine($"Migrating {fileNameTodo}");
+
             try
             {
                 var csvFile = CsvFilesExtracter.Extract(config.LocalZipFilesSearchPath,config.LocalWorkingDirectory,fileNameTodo);
+
                 if (File.ReadLines(csvFile).Count() <= 1)
                 {
                     File.AppendAllLines(config.FileNamesDoneFile, new [] { fileNameTodo } );
                     continue;
                 }
+
                 var fileName = Path.GetFileName(csvFile);
-                var s3file = $"{config.S3WorkingDirectory}/{fileName}";
                 var tableName = Path.GetFileNameWithoutExtension(csvFile);
                 var lines = MigrationLogic.CreateSqlCreateLines(tableName, sfdxClient);
                 redshiftClient.CreateSchemaIfNotExists(config.ConfigRedshift.SchemaName);
                 redshiftClient.DropAndCreateTable(config.ConfigRedshift.SchemaName, tableName, lines);
+
+                var s3file = $"{config.S3WorkingDirectory}/{fileName}";
                 s3Client.UploadFile(csvFile,s3file);
                 redshiftClient.Copy(config.ConfigRedshift.SchemaName,tableName,s3file,config.ConfigS3);
+
                 File.AppendAllLines(config.FileNamesDoneFile, new [] { fileNameTodo } );
             }
             catch (Exception exc)
