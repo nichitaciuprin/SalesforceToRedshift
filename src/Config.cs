@@ -11,10 +11,17 @@ public class Config
     public readonly string S3WorkingDirectory;
     public static Config Get(string[] args)
     {
-        var filePath = args[0];
-        var reader = File.ReadAllText(filePath);
-        var config = JsonSerializer.Deserialize<Config>(reader);
-        return config!;
+        try
+        {
+            var filePath = args[0];
+            var reader = File.ReadAllText(filePath);
+            var config = JsonSerializer.Deserialize<Config>(reader);
+            return config!;
+        }
+        catch (Exception exc)
+        {
+            throw new Exception("Could not read config file",exc);
+        }
     }
     public string FileNamesDoneFile => Path.Combine(LocalWorkingDirectory,"FileNamesDone.txt");
 }
